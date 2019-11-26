@@ -1,0 +1,45 @@
+* {
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
+}
+
+/* Global Styles */
+.main {
+	padding: 1em;
+}
+.header {
+	text-align: center;
+	margin: 1em;
+}
+.row {
+	display: flex;
+	flex-flow: row wrap;
+}
+.chart_wrapper {
+	flex: 1;
+}
+
+/* Mobile Styles */
+@media only screen and (max-width: 400px) {
+	body {
+		background-color: #f0f8ff; /* Aliceblue */
+		font-size: 12px;
+	}
+}
+
+/* Tablet Styles */
+@media only screen and (min-width: 401px) and (max-width: 960px) {
+	body {
+		background-color: #f8f8ff; /* Ghostwhite */
+		font-size: 14px;
+	}
+}
+
+/* Desktop Styles */
+@media only screen and (min-width: 961px) {
+	body {
+		background-color: #fff; /* White */
+		font-size: 16px;
+	}
+}
