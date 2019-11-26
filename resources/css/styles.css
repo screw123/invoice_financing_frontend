@@ -5,19 +5,24 @@
 }
 
 /* Global Styles */
+body {
+	font-family: "Noto Sans KR", sans-serif;
+}
 .main {
 	padding: 1em;
 }
 .header {
 	text-align: center;
-	margin: 1em;
+	text-transform: uppercase;
 }
 .row {
 	display: flex;
-	flex-flow: row wrap;
+	justify-content: center;
+	align-items: center;
 }
 .chart_wrapper {
 	flex: 1;
+	padding: 2em 1em;
 }
 
 /* Mobile Styles */
@@ -25,6 +30,9 @@
 	body {
 		background-color: #f0f8ff; /* Aliceblue */
 		font-size: 12px;
+	}
+	.row {
+		flex-flow: column wrap;
 	}
 }
 
@@ -34,6 +42,9 @@
 		background-color: #f8f8ff; /* Ghostwhite */
 		font-size: 14px;
 	}
+	.row {
+		flex-flow: column wrap;
+	}
 }
 
 /* Desktop Styles */
@@ -41,5 +52,8 @@
 	body {
 		background-color: #fff; /* White */
 		font-size: 16px;
+	}
+	.row {
+		flex-flow: row wrap;
 	}
 }
