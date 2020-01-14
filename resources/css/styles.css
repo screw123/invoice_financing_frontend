@@ -1,0 +1,60 @@
+* {
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
+}
+
+/* Global Styles */
+body {
+	font-family: "Noto Sans KR", sans-serif;
+}
+.main {
+	padding: 1em;
+}
+.header {
+	text-align: center;
+	text-transform: uppercase;
+}
+.row {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+.chart_wrapper {
+	flex: 1;
+	padding: 2em 1em;
+	width: 100%;
+}
+
+/* Mobile Styles */
+@media only screen and (max-width: 400px) {
+	body {
+		background-color: #f0f8ff; /* Aliceblue */
+		font-size: 12px;
+	}
+	.row {
+		flex-flow: column wrap;
+	}
+}
+
+/* Tablet Styles */
+@media only screen and (min-width: 401px) and (max-width: 960px) {
+	body {
+		background-color: #f8f8ff; /* Ghostwhite */
+		font-size: 14px;
+	}
+	.row {
+		flex-flow: column wrap;
+	}
+}
+
+/* Desktop Styles */
+@media only screen and (min-width: 961px) {
+	body {
+		background-color: #fff; /* White */
+		font-size: 16px;
+	}
+	.row {
+		flex-flow: row wrap;
+	}
+}
