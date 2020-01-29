@@ -40,6 +40,23 @@ var chartDetails = [
 				sellAmountArray.slice(10).reduce((acc, v) => acc + v[1], 0)
 			]
 		},
+		tableTitle: "Top 5 buyers",
+		tablerowgenerator: ({ data, i }) => {
+			const amt = parseFloat(data[i].exp)
+			const totalAmt = data.reduce((acc, v) => acc + parseFloat(v.exp, 10), 0)
+
+			return (
+				"<div class='rowDiv'><div>" +
+				(i + 1) +
+				"</div><div>" +
+				data[i].companyName +
+				"</div><div>" +
+				((amt / totalAmt) * 100).toFixed(1) +
+				"%</div><div>$" +
+				amt.toLocaleString("en-US", { maximumFractionDigits: 1 }) +
+				"</div></div>"
+			)
+		},
 		mockData: [
 			{ companyName: "Synergy Lighting Limited", exp: "500000" },
 			{ companyName: "Amazon EU", exp: "381100" },
@@ -78,6 +95,23 @@ var chartDetails = [
 				sellAmountArray.slice(5, 10).reduce((acc, v) => acc + v[1], 0),
 				sellAmountArray.slice(10).reduce((acc, v) => acc + v[1], 0)
 			]
+		},
+		tableTitle: "Top 5 sellers",
+		tablerowgenerator: ({ data, i }) => {
+			const amt = parseFloat(data[i].exp)
+			const totalAmt = data.reduce((acc, v) => acc + parseFloat(v.exp, 10), 0)
+
+			return (
+				"<div class='rowDiv'><div>" +
+				(i + 1) +
+				"</div><div>" +
+				data[i].companyName +
+				"</div><div>" +
+				((amt / totalAmt) * 100).toFixed(1) +
+				"%</div><div>$" +
+				amt.toLocaleString("en-US", { maximumFractionDigits: 1 }) +
+				"</div></div>"
+			)
 		},
 		mockData: [
 			{ companyName: "Synergy Lighting Limited", exp: "500000" },
@@ -250,9 +284,13 @@ $(document).ready(function() {
 			type: "get",
 			success: function(response) {
 				updateChart({ data: JSON.parse(response), chartDetail: v, index: i })
+				if (v.tablerowgenerator)
+					updateTable({ data: JSON.parse(response), tableDetail: v, index: i })
 			},
 			error: function() {
 				updateChart({ data: v.mockData, chartDetail: v, index: i })
+				if (v.tablerowgenerator)
+					updateTable({ data: v.mockData, tableDetail: v, index: i })
 			}
 		})
 	})
@@ -283,4 +321,19 @@ const updateChart = ({ data, chartDetail, index }) => {
 			]
 		}
 	})
+}
+
+const updateTable = ({ data, tableDetail, index }) => {
+	const tableId = "table_" + (index + 1)
+	console.log(tableId)
+	let rows = []
+	for (let i = 0; i < (data.length < 5 ? data.length : 5); i++) {
+		rows.push(tableDetail.tablerowgenerator({ data: data, i: i }))
+	}
+	document.getElementById(tableId).innerHTML =
+		"<div class='tableDiv'><div class='tableTitle'>" +
+		tableDetail.tableTitle +
+		"</div><div class='tableContent'><div class='rowDiv'><div></div><div>Name</div><div>%</div><div>Exposure</div></div>" +
+		rows.reduce((acc, v) => acc + v, "") +
+		"</div></div>"
 }

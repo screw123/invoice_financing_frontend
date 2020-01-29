@@ -16,14 +16,31 @@ body {
 	text-transform: uppercase;
 }
 .row {
-	display: flex;
+	display: grid;
+	grid-template-columns: 1fr 1fr;
 	justify-content: center;
 	align-items: center;
 }
 .chart_wrapper {
-	flex: 1;
 	padding: 2em 1em;
 	width: 100%;
+}
+.tableDiv {
+	display: block;
+	font-size: 0.7rem;
+	max-width: 400px;
+}
+.tableTitle {
+	font-size: 1rem;
+	text-align: center;
+}
+.tableContent {
+	border: 1px solid #aaa;
+}
+.rowDiv {
+	display: grid;
+	grid-template-columns: 15px auto 40px 60px;
+	border: 1px solid #ddd;
 }
 
 /* Mobile Styles */
