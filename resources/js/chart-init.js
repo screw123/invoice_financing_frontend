@@ -40,6 +40,23 @@ var chartDetails = [
 				sellAmountArray.slice(10).reduce((acc, v) => acc + v[1], 0)
 			]
 		},
+		tableTitle: "Top 5 buyers",
+		tablerowgenerator: ({ data, i }) => {
+			const amt = parseFloat(data[i].exp)
+			const totalAmt = data.reduce((acc, v) => acc + parseFloat(v.exp, 10), 0)
+
+			return (
+				"<div class='rowDiv'><div>" +
+				(i + 1) +
+				"</div><div>" +
+				data[i].companyName +
+				"</div><div>" +
+				((amt / totalAmt) * 100).toFixed(1) +
+				"%</div><div>$" +
+				amt.toLocaleString("en-US", { maximumFractionDigits: 1 }) +
+				"</div></div>"
+			)
+		},
 		mockData: [
 			{ companyName: "Synergy Lighting Limited", exp: "500000" },
 			{ companyName: "Amazon EU", exp: "381100" },
@@ -78,6 +95,23 @@ var chartDetails = [
 				sellAmountArray.slice(5, 10).reduce((acc, v) => acc + v[1], 0),
 				sellAmountArray.slice(10).reduce((acc, v) => acc + v[1], 0)
 			]
+		},
+		tableTitle: "Top 5 sellers",
+		tablerowgenerator: ({ data, i }) => {
+			const amt = parseFloat(data[i].exp)
+			const totalAmt = data.reduce((acc, v) => acc + parseFloat(v.exp, 10), 0)
+
+			return (
+				"<div class='rowDiv'><div>" +
+				(i + 1) +
+				"</div><div>" +
+				data[i].companyName +
+				"</div><div>" +
+				((amt / totalAmt) * 100).toFixed(1) +
+				"%</div><div>$" +
+				amt.toLocaleString("en-US", { maximumFractionDigits: 1 }) +
+				"</div></div>"
+			)
 		},
 		mockData: [
 			{ companyName: "Synergy Lighting Limited", exp: "500000" },
@@ -194,28 +228,6 @@ var chartDetails = [
 		]
 	},
 	{
-		ajaxURL: "dashboard/ajax-chart-sector-value",
-		chartTitle: "By Sector",
-		chartLabel: data => data.map(v => v.buyer_industry),
-		dataprocessor: data => {
-			return data.map(v => parseInt(v.amt, 10))
-		},
-		mockData: [
-			{ buyer_industry: '["Retailer"]', amt: "1602010" },
-			{ buyer_industry: '["Business Services"]', amt: "648924.8" },
-			{ buyer_industry: '["Financial Services"]', amt: "374937.3" },
-			{ buyer_industry: '["Government"]', amt: "336035" },
-			{ buyer_industry: '["Wholesaler Distributor"]', amt: "260100" },
-			{ buyer_industry: '["Construction"]', amt: "248018" },
-			{ buyer_industry: '["Engineering"]', amt: "231565" },
-			{ buyer_industry: '["Telecom"]', amt: "181283" },
-			{ buyer_industry: '["IT. Cloud and Software"]', amt: "116000" },
-			{ buyer_industry: '["Materials"]', amt: "112731.11" },
-			{ buyer_industry: '["Consumer Discretionary"]', amt: "80000" },
-			{ buyer_industry: '["Manufacturing"]', amt: "38600" }
-		]
-	},
-	{
 		ajaxURL: "dashboard/ajax-chart-average-duration",
 		chartTitle: "Average Duration",
 		chartLabel: [
@@ -240,6 +252,45 @@ var chartDetails = [
 				MoreThanThreeMonth: "904937.3"
 			}
 		]
+	},
+	{
+		ajaxURL: "dashboard/ajax-chart-sector-value",
+		chartTitle: "By Sector",
+		chartLabel: data => data.map(v => v.buyer_industry),
+		dataprocessor: data => {
+			return data.map(v => parseInt(v.amt, 10))
+		},
+		tableTitle: "Top 5 by sector",
+		tablerowgenerator: ({ data, i }) => {
+			const amt = parseFloat(data[i].amt)
+			const totalAmt = data.reduce((acc, v) => acc + parseFloat(v.amt, 10), 0)
+
+			return (
+				"<div class='rowDiv'><div>" +
+				(i + 1) +
+				"</div><div>" +
+				data[i].buyer_industry +
+				"</div><div>" +
+				((amt / totalAmt) * 100).toFixed(1) +
+				"%</div><div>$" +
+				amt.toLocaleString("en-US", { maximumFractionDigits: 1 }) +
+				"</div></div>"
+			)
+		},
+		mockData: [
+			{ buyer_industry: '["Retailer"]', amt: "1602010" },
+			{ buyer_industry: '["Business Services"]', amt: "648924.8" },
+			{ buyer_industry: '["Financial Services"]', amt: "374937.3" },
+			{ buyer_industry: '["Government"]', amt: "336035" },
+			{ buyer_industry: '["Wholesaler Distributor"]', amt: "260100" },
+			{ buyer_industry: '["Construction"]', amt: "248018" },
+			{ buyer_industry: '["Engineering"]', amt: "231565" },
+			{ buyer_industry: '["Telecom"]', amt: "181283" },
+			{ buyer_industry: '["IT. Cloud and Software"]', amt: "116000" },
+			{ buyer_industry: '["Materials"]', amt: "112731.11" },
+			{ buyer_industry: '["Consumer Discretionary"]', amt: "80000" },
+			{ buyer_industry: '["Manufacturing"]', amt: "38600" }
+		]
 	}
 ]
 
@@ -250,9 +301,13 @@ $(document).ready(function() {
 			type: "get",
 			success: function(response) {
 				updateChart({ data: JSON.parse(response), chartDetail: v, index: i })
+				if (v.tablerowgenerator)
+					updateTable({ data: JSON.parse(response), tableDetail: v, index: i })
 			},
 			error: function() {
 				updateChart({ data: v.mockData, chartDetail: v, index: i })
+				if (v.tablerowgenerator)
+					updateTable({ data: v.mockData, tableDetail: v, index: i })
 			}
 		})
 	})
@@ -283,4 +338,19 @@ const updateChart = ({ data, chartDetail, index }) => {
 			]
 		}
 	})
+}
+
+const updateTable = ({ data, tableDetail, index }) => {
+	const tableId = "table_" + (index + 1)
+	console.log(tableId)
+	let rows = []
+	for (let i = 0; i < (data.length < 5 ? data.length : 5); i++) {
+		rows.push(tableDetail.tablerowgenerator({ data: data, i: i }))
+	}
+	document.getElementById(tableId).innerHTML =
+		"<div class='tableDiv'><div class='tableTitle'>" +
+		tableDetail.tableTitle +
+		"</div><div class='tableContent'><div class='rowDiv'><div></div><div>Name</div><div>%</div><div>Exposure</div></div>" +
+		rows.reduce((acc, v) => acc + v, "") +
+		"</div></div>"
 }
