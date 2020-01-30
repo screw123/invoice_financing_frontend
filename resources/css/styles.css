@@ -18,6 +18,13 @@ body {
 .row {
 	display: grid;
 	grid-template-columns: 1fr 1fr;
+	grid-template-rows: auto;
+	grid-template-areas:
+		"c1 t1"
+		"c2 t2"
+		"c3 t3"
+		"c4 c5"
+		"c6 t6";
 	justify-content: center;
 	align-items: center;
 }
@@ -41,6 +48,38 @@ body {
 	display: grid;
 	grid-template-columns: 15px auto 40px 60px;
 	border: 1px solid #ddd;
+}
+
+.c1 {
+	grid-area: c1;
+}
+.c2 {
+	grid-area: c2;
+}
+.c3 {
+	grid-area: c3;
+}
+.c4 {
+	grid-area: c4;
+}
+.c5 {
+	grid-area: c5;
+}
+.c6 {
+	grid-area: c6;
+}
+
+.t1 {
+	grid-area: t1;
+}
+.t2 {
+	grid-area: t2;
+}
+.t3 {
+	grid-area: t3;
+}
+.t6 {
+	grid-area: t6;
 }
 
 /* Mobile Styles */

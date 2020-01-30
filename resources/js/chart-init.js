@@ -228,28 +228,6 @@ var chartDetails = [
 		]
 	},
 	{
-		ajaxURL: "dashboard/ajax-chart-sector-value",
-		chartTitle: "By Sector",
-		chartLabel: data => data.map(v => v.buyer_industry),
-		dataprocessor: data => {
-			return data.map(v => parseInt(v.amt, 10))
-		},
-		mockData: [
-			{ buyer_industry: '["Retailer"]', amt: "1602010" },
-			{ buyer_industry: '["Business Services"]', amt: "648924.8" },
-			{ buyer_industry: '["Financial Services"]', amt: "374937.3" },
-			{ buyer_industry: '["Government"]', amt: "336035" },
-			{ buyer_industry: '["Wholesaler Distributor"]', amt: "260100" },
-			{ buyer_industry: '["Construction"]', amt: "248018" },
-			{ buyer_industry: '["Engineering"]', amt: "231565" },
-			{ buyer_industry: '["Telecom"]', amt: "181283" },
-			{ buyer_industry: '["IT. Cloud and Software"]', amt: "116000" },
-			{ buyer_industry: '["Materials"]', amt: "112731.11" },
-			{ buyer_industry: '["Consumer Discretionary"]', amt: "80000" },
-			{ buyer_industry: '["Manufacturing"]', amt: "38600" }
-		]
-	},
-	{
 		ajaxURL: "dashboard/ajax-chart-average-duration",
 		chartTitle: "Average Duration",
 		chartLabel: [
@@ -273,6 +251,45 @@ var chartDetails = [
 				TwoToThreeMonth: "802318",
 				MoreThanThreeMonth: "904937.3"
 			}
+		]
+	},
+	{
+		ajaxURL: "dashboard/ajax-chart-sector-value",
+		chartTitle: "By Sector",
+		chartLabel: data => data.map(v => v.buyer_industry),
+		dataprocessor: data => {
+			return data.map(v => parseInt(v.amt, 10))
+		},
+		tableTitle: "Top 5 by sector",
+		tablerowgenerator: ({ data, i }) => {
+			const amt = parseFloat(data[i].amt)
+			const totalAmt = data.reduce((acc, v) => acc + parseFloat(v.amt, 10), 0)
+
+			return (
+				"<div class='rowDiv'><div>" +
+				(i + 1) +
+				"</div><div>" +
+				data[i].buyer_industry +
+				"</div><div>" +
+				((amt / totalAmt) * 100).toFixed(1) +
+				"%</div><div>$" +
+				amt.toLocaleString("en-US", { maximumFractionDigits: 1 }) +
+				"</div></div>"
+			)
+		},
+		mockData: [
+			{ buyer_industry: '["Retailer"]', amt: "1602010" },
+			{ buyer_industry: '["Business Services"]', amt: "648924.8" },
+			{ buyer_industry: '["Financial Services"]', amt: "374937.3" },
+			{ buyer_industry: '["Government"]', amt: "336035" },
+			{ buyer_industry: '["Wholesaler Distributor"]', amt: "260100" },
+			{ buyer_industry: '["Construction"]', amt: "248018" },
+			{ buyer_industry: '["Engineering"]', amt: "231565" },
+			{ buyer_industry: '["Telecom"]', amt: "181283" },
+			{ buyer_industry: '["IT. Cloud and Software"]', amt: "116000" },
+			{ buyer_industry: '["Materials"]', amt: "112731.11" },
+			{ buyer_industry: '["Consumer Discretionary"]', amt: "80000" },
+			{ buyer_industry: '["Manufacturing"]', amt: "38600" }
 		]
 	}
 ]
