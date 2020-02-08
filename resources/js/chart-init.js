@@ -336,13 +336,28 @@ const updateChart = ({ data, chartDetail, index }) => {
 					data: chartDetail.dataprocessor(data)
 				}
 			]
+		},
+		options: {
+			tooltips: {
+				callbacks: {
+					label: function(tooltipItem, data) {
+						const dataset = data.datasets[tooltipItem.datasetIndex]
+						const total = dataset.data.reduce(
+							(acc, v) => acc + parseFloat(v),
+							0
+						)
+						const val = parseFloat(dataset.data[tooltipItem.index])
+						const percentage = Math.floor((val / total) * 100 + 0.5)
+						return percentage + "%"
+					}
+				}
+			}
 		}
 	})
 }
 
 const updateTable = ({ data, tableDetail, index }) => {
 	const tableId = "table_" + (index + 1)
-	console.log(tableId)
 	let rows = []
 	for (let i = 0; i < (data.length < 5 ? data.length : 5); i++) {
 		rows.push(tableDetail.tablerowgenerator({ data: data, i: i }))
